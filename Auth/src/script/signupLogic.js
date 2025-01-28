@@ -125,8 +125,8 @@ function submitOTP() {
         headers: {
           'Content-Type': 'application/json',
         },
-      }
-    )
+      } 
+    ) 
     .then((response) => {
        myAlert('success', response.data.message);
       window.location.href = `https://ping-server-2.onrender.com/auth/newUserInfo?email=${email}&platform=markethealers`;
