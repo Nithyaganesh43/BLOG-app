@@ -88,38 +88,11 @@ const SubText = styled.h5`
   font-size: calc(1rem + 0.5vw);
   color: rgb(207, 207, 207);
 `;
-
-// const CTA = styled.button`
-//   background-color: var(--white);
-//   color: #0a0b10;
-//   padding: 0.5rem 1rem;
-//   margin-top: 0.5em;
-//   border-radius: 20px;
-//   cursor: pointer;
-//   font-size: calc(1.2rem + 0.8vw);
-//   font-weight: 700;
-//   display: flex;
-//   align-items: center;
-//   transition: transform 0.2s;
-
-//   img { 
-//     width: 1.9rem;
-//   }
-//   @media only screen and (max-width: 48em) {
-//     padding: 0.5rem 1rem;
-//   }
-//   &:hover {
-//     transform: scale(1.1);
-//   }
-//   &:active {
-//     transform: scale(0.9);
-//   }
-// `;
-
+ 
 const HeroSection = () => {
    const handleClick = () => {
      window.location.href =
-       'http://127.0.0.1:5500/client/Auth/src/AuthPage/signup.html';
+       'https://blog-app-auth-client.vercel.app/src/AuthPage/signup.html';
 };
 
   return (

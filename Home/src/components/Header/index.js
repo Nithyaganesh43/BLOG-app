@@ -192,11 +192,11 @@ const Header = () => {
     e.preventDefault();
     console.log('Login button clicked');
     window.location.href =
-      'http://127.0.0.1:5500/client/Auth/src/AuthPage/login.html';  };
+      'https://blog-app-auth-client.vercel.app/src/AuthPage/login.html';  };
 
   const handleSignup = () => {
     window.location.href =
-      'http://127.0.0.1:5500/client/Auth/src/AuthPage/signup.html';
+      'https://blog-app-auth-client.vercel.app/src/AuthPage/signup.html';
   };
 
   useEffect(() => {

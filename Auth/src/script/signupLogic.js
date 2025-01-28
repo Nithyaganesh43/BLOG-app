@@ -28,7 +28,7 @@ function myAlert( icon, title) {
   });
 }
 function login(){
-   window.location.href = `http://127.0.0.1:5500/client/Auth/src/AuthPage/login.html`;
+   window.location.href = `https://blog-app-auth-client.vercel.app/src/AuthPage/login.html`;
 
 }
 document.addEventListener('keydown', function (e) {

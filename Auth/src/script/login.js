@@ -35,7 +35,7 @@ document.addEventListener('keydown', function (e) {
 });
 
 function signup() {
-  location.href = `http://127.0.0.1:5500/client/Auth/src/AuthPage/signup.html`;
+  location.href = `https://blog-app-auth-client.vercel.app/src/AuthPage/signup.html`;
 }
 
 async function login() {
