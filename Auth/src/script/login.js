@@ -63,7 +63,7 @@ async function login() {
     }
     await axios
       .post(
-        `http://localhost:3000/auth/userLogedIn`,
+        `https://ping-server-2.onrender.com/auth/userLogedIn`,
         { userName, password },
         {
           withCredentials: true,
@@ -73,7 +73,7 @@ async function login() {
         }
       )
       .then(() => {
-        location.href = `http://localhost:3000/auth/`;
+        location.href = `https://ping-server-2.onrender.com/auth/`;
       })
       .catch(() => {
         myAlert('error', 'Login failed');
@@ -90,11 +90,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 function forgotPassword() {
-  location.href = `http://localhost:3000/auth/forgotPassword`;
+  location.href = `https://ping-server-2.onrender.com/auth/forgotPassword`;
 }
 
 function googleLoginButton(e) { e.preventDefault(); 
-   location.href = `http://localhost:3000/auth/auth/google` 
+   location.href = `https://ping-server-2.onrender.com/auth/auth/google` 
 }
 window.onload = function () {
   document.querySelector('input').focus();

@@ -136,7 +136,7 @@ myAlert('info','Validating');
     if (validateInput(fullName, userName, password, confirmPassword)) {
       await axios
         .post(
-          'http://localhost:3000/auth/signupSuccessful',
+          'https://ping-server-2.onrender.com/auth/signupSuccessful',
           { fullName, userName, password, email, platform },
           {
             withCredentials: true,
@@ -148,7 +148,7 @@ myAlert('info','Validating');
         .then((response) => {
           myAlert('success', response.data.message);
           window.location.href =
-            'http://localhost:3000/auth/home';
+            'https://ping-server-2.onrender.com/auth/home';
         })
         .catch((error) => {
           myAlert(

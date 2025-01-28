@@ -36,7 +36,7 @@ function myAlert(icon, title) {
 }
 
 function googleLoginButton() {
-  window.location.href = `http://localhost:3000/auth/auth/google`;
+  window.location.href = `https://ping-server-2.onrender.com/auth/auth/google`;
 }
 
 async function getOTP() {
@@ -50,7 +50,7 @@ async function getOTP() {
   window.localStorage.setItem('email', email);
   await axios
     .post(
-      `http://localhost:3000/auth/forgotPasswordGetOtp`,
+      `https://ping-server-2.onrender.com/auth/forgotPasswordGetOtp`,
       { email },
       {
         withCredentials: true,
@@ -88,7 +88,7 @@ async function getOTP() {
           error.response?.data?.message + ' redirecting to Singup Page'
         );
         setTimeout(() => {
-          window.location.href = `http://localhost:3000/auth/signup`;
+          window.location.href = `https://ping-server-2.onrender.com/auth/signup`;
         }, 3000);
       } else { 
         myAlert('error', 'Something Went Wrong ');
@@ -107,7 +107,7 @@ async function submitOTP() {
   email = window.localStorage.getItem('email');
   await axios
     .post(
-      `http://localhost:3000/auth/forgotPasswordVerifyOtp`,
+      `https://ping-server-2.onrender.com/auth/forgotPasswordVerifyOtp`,
       { otp, email },
       {
         withCredentials: true,
@@ -162,7 +162,7 @@ async function resetPassword() {
   }
   await axios
     .post(
-      `http://localhost:3000/auth/resetPassword`,
+      `https://ping-server-2.onrender.com/auth/resetPassword`,
       { password: newPassword },
       {
         withCredentials: true,
@@ -173,7 +173,7 @@ async function resetPassword() {
     )
     .then((response) => {
       myAlert('success', response.data.message);
-      window.location.href = `http://localhost:3000/auth/`;
+      window.location.href = `https://ping-server-2.onrender.com/auth/`;
     })
     .catch((error) => {
       myAlert('error', error.response.data.message);

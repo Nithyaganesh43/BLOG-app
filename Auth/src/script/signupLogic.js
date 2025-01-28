@@ -43,7 +43,7 @@ var email;
 
 function googleLoginButton(e) {
   e.preventDefault();
-  location.href = `http://localhost:3000/auth/auth/google`;
+  location.href = `https://ping-server-2.onrender.com/auth/auth/google`;
 }
 
 async function getOTP() {
@@ -65,7 +65,7 @@ async function getOTP() {
 
   try {
     const response = await axios.post(
-      `http://localhost:3000/auth/auth/markethealers`,
+      `https://ping-server-2.onrender.com/auth/auth/markethealers`,
       { email },
       {
         withCredentials: true,
@@ -118,7 +118,7 @@ function submitOTP() {
 
   axios
     .post(
-      `http://localhost:3000/auth/auth/markethealers/verifyotp`,
+      `https://ping-server-2.onrender.com/auth/auth/markethealers/verifyotp`,
       { otp },
       {
         withCredentials: true,
@@ -129,7 +129,7 @@ function submitOTP() {
     )
     .then((response) => {
        myAlert('success', response.data.message);
-      window.location.href = `http://localhost:3000/auth/newUserInfo?email=${email}&platform=markethealers`;
+      window.location.href = `https://ping-server-2.onrender.com/auth/newUserInfo?email=${email}&platform=markethealers`;
     })
     .catch((error) => {
        myAlert("error", error.response?.data?.message || 'Invalid OTP. Please try again.');
