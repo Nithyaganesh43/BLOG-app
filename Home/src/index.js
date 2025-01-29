@@ -16,29 +16,29 @@ const Home = lazy(() => import('./Pages/Home'));
 const Main = lazy(() => import('./Pages/Main'));
 
 const RootApp = () => {
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(
-          'https://ping-server-2.onrender.com/auth/authCheck',
-          {
-            method: 'GET',
-            credentials: 'include',
-          }
-        );
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         'https://ping-server-2.onrender.com/auth/authCheck',
+  //         {
+  //           method: 'GET',
+  //           credentials: 'include',
+  //         }
+  //       );
 
-        if (response.ok) { 
-          toast.success('Happy to see you again Logged');
-        } else { 
-          toast.success(`Welcome To Ng's Blog. SignUp`);
-        }
-      } catch (error) {
-        console.error('Error checking auth:');
-      }
-    };
+  //       if (response.ok) { 
+  //         toast.success('Happy to see you again Logged');
+  //       } else { 
+  //         toast.success(`Welcome To Ng's Blog. SignUp`);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error checking auth:');
+  //     }
+  //   };
 
-    checkAuth();
-  }, []);
+  //   checkAuth();
+  // }, []);
 
   return (
     <>
