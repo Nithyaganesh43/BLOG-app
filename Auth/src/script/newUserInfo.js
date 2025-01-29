@@ -137,7 +137,7 @@ myAlert('info','Validating');
       await axios
         .post(
           'https://ping-server-2.onrender.com/auth/signupSuccessful',
-          { fullName, userName, password, email, platform },
+          { fullName, userName, password, email, platform:'Blog' },
           {
             withCredentials: true,
             headers: {

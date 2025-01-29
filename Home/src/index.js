@@ -13,32 +13,32 @@ const TermsAndConditions = lazy(() =>
 );
 const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy/index'));
 const Home = lazy(() => import('./Pages/Home'));
+const Main = lazy(() => import('./Pages/Main'));
 
 const RootApp = () => {
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         'https://server.markethealers.com/markethealers/auth/authCheck',
-  //         {
-  //           method: 'GET',
-  //           credentials: 'include',
-  //         }
-  //       );
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(
+          'https://ping-server-2.onrender.com/auth/authCheck',
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
-  //       if (response.ok) { 
-  //         toast.success('Successfully Logged In');
-  //       } else {
-  //         console.log('failed');
-  //         toast.success('Welcome To Market Healers. SignUp and Heal Your Finance Life Here');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking auth:');
-  //     }
-  //   };
+        if (response.ok) { 
+          toast.success('Happy to see you again Logged');
+        } else { 
+          toast.success(`Welcome To Ng's Blog. SignUp`);
+        }
+      } catch (error) {
+        console.error('Error checking auth:');
+      }
+    };
 
-  //   checkAuth();
-  // }, []);
+    checkAuth();
+  }, []);
 
   return (
     <>
@@ -59,6 +59,15 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: '/',
+        element: (
+          <>
+            <Header />
+            <Home />
+          </>
+        ),
+      },
+      {
+        path: '/Home',
         element: (
           <>
             <Header />
