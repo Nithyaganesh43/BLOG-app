@@ -65,7 +65,7 @@ async function getOTP() {
 
   try {
     const response = await axios.post(
-      `https://ping-server-2.onrender.com/auth/auth/markethealers`,
+      `https://ping-server-2.onrender.com/auth/auth/Blog`,
       { email },
       {
         withCredentials: true,
@@ -118,7 +118,7 @@ function submitOTP() {
 
   axios
     .post(
-      `https://ping-server-2.onrender.com/auth/auth/markethealers/verifyotp`,
+      `https://ping-server-2.onrender.com/auth/auth/verifyotp`,
       { otp },
       {
         withCredentials: true,
@@ -129,7 +129,7 @@ function submitOTP() {
     ) 
     .then((response) => {
        myAlert('success', response.data.message);
-      window.location.href = `https://ping-server-2.onrender.com/auth/newUserInfo?email=${email}&platform=markethealers`;
+      window.location.href = `https://ping-server-2.onrender.com/auth/newUserInfo?email=${email}&platform=NgBlog`;
     })
     .catch((error) => {
        myAlert("error", error.response?.data?.message || 'Invalid OTP. Please try again.');
