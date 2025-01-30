@@ -30,26 +30,7 @@ const Title = styled.h1`
     border-bottom: 2px solid var(--pink);
   }
 `;
-const Icons = styled.div`
-  display: flex;
-  cursor: pointer;
-  margin-bottom: 2rem;
-  a {
-    &:hover {
-      img {
-        filter: invert(20%) sepia(100%) saturate(500%) hue-rotate(570deg)
-          brightness(100%) contrast(97%);
-      }
-    }
-    &:not(:last-child) {
-      margin-right: 1rem;
-    }
-    img {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  }
-`;
+ 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -182,35 +163,7 @@ const Contact = () => {
   return (
     <ContactSection id="contact">
       <Title>Get in touch</Title>
-      <Icons>
-        <a
-          href="https://www.linkedin.com/in/market-healers-66a343344/"
-          target="_blank"
-          rel="noopener noreferrer">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-            alt="LinkedIn"
-          />
-        </a>
-        <a
-          href="https://www.whatsapp.com/channel/0029Vb0CJG7KgsNkWnwFHL3s"
-          target="_blank"
-          rel="noopener noreferrer">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-            alt="WhatsApp"
-          />
-        </a>
-        <a
-          href="https://www.instagram.com/market.healers/"
-          target="_blank"
-          rel="noopener noreferrer">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-            alt="Instagram"
-          />
-        </a>
-      </Icons>
+      
       <Form>
         <Row>
           <input id={'name'} name="name" type="text" placeholder="your name" />

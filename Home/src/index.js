@@ -8,6 +8,8 @@ import { GlobalStyle } from './globalStyles';
 import Contact from './components/Contact/index';
 
 const Header = lazy(() => import('./components/Header/index'));
+
+const HeaderMain = lazy(() => import('./components/HeaderMain/index'));
 const TermsAndConditions = lazy(() =>
   import('./Pages/TermsAndConditions/index')
 );
@@ -67,11 +69,11 @@ const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: '/Home',
+        path: '/home',
         element: (
           <>
-            <Header />
-            <Home />
+            <HeaderMain />
+            <Main />
           </>
         ),
       },

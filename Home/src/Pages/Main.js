@@ -12,9 +12,8 @@ const Container = styled.div`
 
 const Main = () => {
   return (
-    <Container>
-      <HeroSection />
-      <About />
+    <Container>  
+      <MainSection/>
     </Container>
   );
 };
