@@ -94,11 +94,8 @@ const ProfileMenu = styled.div`
 `;
 const fetchUserInfo = async (setUser) => {
   try {
-    const response = await fetch(
-      'https://ping-server-2.onrender.com/getMyInfo',
-      { credentials: 'include' }
-    );
-    const userData = await response.json();
+    
+    const userData = JSON.parse(localStorage.getItem('user')); 
     setUser(userData);
      
   } catch (error) {
@@ -113,8 +110,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     fetchUserInfo(setUser);
-  }, [setUser]);
-  console.log(user);
+  }, [setUser]); 
 
 //   const handleClickOutside = (event) => {
 //     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -172,7 +168,13 @@ const Header = () => {
           }}>
           My Profile
         </button>
-        <button>Logout</button>
+        <button onClick={async()=>{
+          await fetch('https://ping-server-2.onrender.com/auth/logout', {
+            method: 'GET', 
+            headers: { 'Content-Type': 'application/json' }, 
+          });
+          navigate('/');
+        }}>Logout</button>
       </ProfileMenu>
     </Headers>
   ) : (

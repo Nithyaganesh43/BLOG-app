@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaHeart, FaShare, FaComment } from 'react-icons/fa';
+import {
+  FaHeart,
+  FaShare,
+  FaComment,
+  FaTrashAlt,
+  FaEdit,
+} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
@@ -113,11 +119,7 @@ const IconButton = styled.button`
 
 const fetchUserInfo = async (setUser) => {
   try {
-    const response = await fetch(
-      'https://ping-server-2.onrender.com/getMyInfo',
-      { credentials: 'include' }
-    );
-    const userData = await response.json();
+    const userData = JSON.parse(localStorage.getItem('user')); 
     setUser(userData);
   } catch (error) {
     console.error('Error fetching user info:', error);
@@ -125,13 +127,86 @@ const fetchUserInfo = async (setUser) => {
 };
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
   
+  const [activeTab, setActiveTab] = useState('MyBlogs');
     const [blogs, setBlogs] = useState([]);
-    const [userId, setUserId] = useState(null); 
+    const [user, setUser] = useState(null);  
+  const navigate = useNavigate();
+ const fetchData = async (setBlogs) => {
+   try {
+     const response = await fetch(
+       'https://ping-server-2.onrender.com/getAllBlogs'
+     );
+     const data = await response.json();
+
+     setBlogs(
+       data.map((blog) => ({
+         ...blog,
+         likedByUser: blog.likes.includes(user?.UserId),
+       }))
+     );
+   } catch (error) {
+     console.error('Error fetching data:', error);
+   }
+ };
+const deleteBlog = async (id) => {
+  await fetch('https://ping-server-2.onrender.com/deleteBlog', {
+    method: 'POST',
+    body: JSON.stringify({ blogId: id }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  fetchData(setBlogs);
+};
+
   useEffect(() => {
     fetchUserInfo(setUser);
   }, [setUser]);
+  useEffect(() => {
+   
+    if (user?.UserId) {
+      fetchData(setBlogs);
+    }
+  }, [user]);
+
+  const like = async (id) => {
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((blog) =>
+        blog._id === id
+          ? {
+              ...blog,
+              likes: blog.likes.includes(user?.UserId)
+                ? blog.likes.filter((like) => like !== user?.UserId)
+                : [...blog.likes, user?.UserId],
+            }
+          : blog
+      )
+    );
+    try {
+      await fetch('https://ping-server-2.onrender.com/addLikeBlog', {
+        method: 'POST',
+        body: JSON.stringify({ blogId: id }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Error liking blog:', error);
+    }
+  };
+ const filteredBlogs = blogs.filter((blog) => {
+  
+//  console.log(blog.author[0].UserId);
+   if (activeTab === 'MyBlogs') {
+     return blog.author[0].UserId === user?.UserId;
+   } else if (activeTab === 'MyFavoriteBlogs') {
+     return blog.likes.includes(user?.UserId);
+   } else if (activeTab === 'MyComments') {
+    
+     return blog.comments.some(
+       (comment) => (comment.user[0].UserId==user.UserId)
+     );
+   }
+   return false;
+ });
   return (
     <div className="Profile-container">
       <h1>Profile</h1>
@@ -142,10 +217,147 @@ const Profile = () => {
           className="profile-pic"
         />
         <span>{user?.fullName}</span>
-      </div>
+      </div> 
       <div className="divider"></div>
 
-      <h1>My Blogs</h1>
+      <div className="tabs">
+        <button onClick={() => setActiveTab('MyBlogs')}>My Blogs</button>
+        <button onClick={() => setActiveTab('MyFavoriteBlogs')}>
+          My Favorite Blogs
+        </button>
+        <button onClick={() => setActiveTab('MyComments')}>My Comments</button>
+      </div>
+      <div className="divider"></div>
+      <MainSectionStyle>
+        <BlogContainer>
+          {filteredBlogs.map((blog) => {
+            if (blog.author[0].UserId == user.UserId) {
+              // const fetchBlogs = async () => {
+              //   try {
+              //     const response = await fetch('https://ping-server-2.onrender.com/getAllBlogs');
+              //     const data = await response.json();
+              //     setBlogs(data);
+              //   } catch (error) {
+              //     console.error('Error fetching blogs:', error);
+              //   }
+              // };
+
+              // const filteredBlogs = blogs.filter((blog) => {
+              //   if (activeTab === 'MyBlogs') {
+              //     return blog.author[0].UserId === user?.UserId;
+              //   } else if (activeTab === 'MyFavoriteBlogs') {
+              //     return blog.likes.includes(user?.UserId);
+              //   } else if (activeTab === 'MyComments') {
+              //     return blog.comments.some((comment) => comment.author.UserId === user?.UserId);
+              //   }
+              //   return false;
+              // });
+
+              // return (
+              //   <div className="Profile-container">
+              //     <h1>Profile</h1>
+              //     <div className="author">
+              //       <img src={user?.profileUrl} alt={user?.fullName} className="profile-pic" />
+              //       <span>{user?.fullName}</span>
+              //     </div>
+              //     <div className="divider"></div>
+
+              return (
+                <Blog key={blog._id}>
+                  <CoverImage
+                    src={blog.coverImgUrl}
+                    alt={blog.title}
+                    onClick={() => navigate(`/blog/${blog._id}`)}
+                  />
+                  <h3 onClick={() => navigate(`/blog/${blog._id}`)}>
+                    {blog.title}
+                  </h3>
+                  <h5 onClick={() => navigate(`/blog/${blog._id}`)}>
+                    {blog.description}
+                  </h5>
+                  <p onClick={() => navigate(`/blog/${blog._id}`)}>
+                    Updated: {new Date(blog.updatedAt).toLocaleString()}
+                  </p>
+                  <p
+                    onClick={() => navigate(`/blog/${blog._id}`)}
+                    style={{
+                      color: 'pink',
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.textDecoration = 'underline')
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.textDecoration = 'none')
+                    }>
+                    Read Full Blog
+                  </p>
+                  <FooterSection>
+                    <Author>
+                      <img
+                        src={blog.author[0]?.profileUrl || ''}
+                        alt={blog.author[0]?.fullName || 'Author'}
+                      />
+                      <span>{blog.author[0]?.fullName || 'Anonymous'}</span>
+                    </Author>
+                    <ButtonContainer>
+                      <IconButton onClick={() => like(blog._id)}>
+                        <FaHeart
+                          style={{
+                            color: blog.likes.includes(user?.UserId)
+                              ? 'red'
+                              : 'white',
+                          }}
+                        />
+                        {blog.likes.length}
+                      </IconButton>
+                      <IconButton>
+                        <FaShare
+                          onClick={async () => {
+                            try {
+                              await navigator.share({
+                                title: 'Check this out!',
+                                text: 'Interesting link:',
+                                url: 'http://localhost:3000/blog/' + blog._id,
+                              });
+                            } catch (err) {
+                              console.error('Sharing failed', err);
+                            }
+                          }}
+                        />
+                      </IconButton>
+                      <IconButton>
+                        <FaComment
+                          onClick={() => navigate(`/blog/${blog._id}`)}
+                        />{' '}
+                        {blog?.comments?.length}
+                      </IconButton>
+                      <IconButton>
+                        <FaEdit
+                          onClick={() => {
+                            window.localStorage.setItem(
+                              'editBlog',
+                              JSON.stringify(blog)
+                            );
+                            navigate(`/Editblog`);
+                          }}
+                        />
+                      </IconButton>
+                      <IconButton>
+                        <FaTrashAlt
+                          onClick={() => {
+                            deleteBlog(blog._id);
+                          }}
+                        />
+                      </IconButton>
+                    </ButtonContainer>
+                  </FooterSection>
+                </Blog>
+              );
+            }
+          })}
+        </BlogContainer>
+      </MainSectionStyle>
     </div>
   );
 }; 

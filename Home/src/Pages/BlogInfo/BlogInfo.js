@@ -17,8 +17,8 @@ const fetchUserInfo = async (setUser) => {
   }
 };
 
-const fetchBlogData = (id, setBlog) => {
-  fetch('https://ping-server-2.onrender.com/getOneFullBlog', {
+const fetchBlogData =async (id, setBlog) => {
+ await fetch('https://ping-server-2.onrender.com/getOneFullBlog', {
     method: 'POST',
     body: JSON.stringify({ blogId: id }),
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +29,38 @@ const fetchBlogData = (id, setBlog) => {
     });
 };
 
+
+const BlogInfo = () => {
+  const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [comment, setComment] = useState('');
+  const [user, setUser] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [Likes, setLikes] = useState([]);
+  useEffect(() => {
+    fetchUserInfo(setUser);
+  }, [setUser]);
+
+  useEffect(() => {
+    fetchBlogData(id, setBlog);
+  }, [id]);
+ useEffect(() => { 
+  if(blog){
+    setComments(blog.comments);
+    setLikes(blog.likes);
+  }
+ }, [blog]);
+ 
+
 const like = async (id) => {
+  setLikes((prev) => {
+    if (prev.includes(user.UserId)) {
+      return prev.filter((m) => m !== user.UserId);
+    } else {
+      return [user.UserId, ...prev];
+    }
+  });
+
   try {
     await fetch('https://ping-server-2.onrender.com/addLikeBlog', {
       method: 'POST',
@@ -42,42 +73,51 @@ const like = async (id) => {
   }
 };
 
-const BlogInfo = () => {
-  const { id } = useParams();
-  const [blog, setBlog] = useState(null);
-  const [comment, setComment] = useState('');
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    fetchUserInfo(setUser);
-  }, []);
-
-  useEffect(() => {
-    fetchBlogData(id, setBlog);
-  }, [id]);
-
-  const addComment = async () => {
+ const addComment = async () => {
     if (!comment.trim()) return;
+        setComments((prev) => {
+           
+           return [
+             ...prev,
+             {
+               user: [
+                 {
+                   UserId: user._id,
+                   fullName: user.fullName,
+                   userName: user.userName,
+                   profileUrl: user.profileUrl,
+                 },
+               ],
+               text: comment,
+               createdAt: new Date(),
+             },
+           ];
+        });
+        const msg = comment;
+        setComment('');
+        
     await fetch('https://ping-server-2.onrender.com/addCommentBlog', {
       method: 'POST',
-      body: JSON.stringify({ blogId: id, message: comment }),
+      body: JSON.stringify({ blogId: id, message: msg }),
       headers: { 'Content-Type': 'application/json' },
-    });
-    fetchUserInfo();
+    }); 
     fetchBlogData(id, setBlog);
-    setComment('');
-  };
-
+  }; 
   const deleteComment = async (commentId) => {
+    
+    setComments((prev)=>{
+      return prev.filter(c=>{
+        return c.createdAt!=commentId;
+      })
+    }) 
     await fetch('https://ping-server-2.onrender.com/deleteCommentBlog', {
       method: 'POST',
       body: JSON.stringify({ blogId: id, commentId }),
       headers: { 'Content-Type': 'application/json' },
-    });
-    fetchUserInfo();
-    fetchBlogData(id, setBlog);
-  };
-console.log(blog)
+    }); 
+   await fetchBlogData(id, setBlog);
+    
+  }; 
   return blog && user ? (
     <div className="BlogInfocontainer">
       <div className="BlogInfocontent">
@@ -92,16 +132,19 @@ console.log(blog)
           </div>
           <button
             className="BlogInfoicon-button"
-            onClick={async () => {
-              await like(id);
-              fetchBlogData(id, setBlog);
+            onClick={() => {
+              like(id);
             }}>
             <FaHeart
               style={{
-                color: blog.likes.includes(user.UserId) ? 'red' : 'white',
+                color: Likes
+                  ? Likes.includes(user.UserId)
+                    ? 'red'
+                    : 'white'
+                  : 'white',
               }}
             />{' '}
-            {blog.likes.length}
+            {Likes ? Likes.length : 0}
           </button>
           <button
             className="BlogInfoicon-button"
@@ -138,7 +181,7 @@ console.log(blog)
         <button className="BlogInfobutton" onClick={addComment}>
           Post
         </button>
-        {blog.comments.map((c) => (
+        {comments.map((c) => (
           <div className="BlogInfocomment" key={c._id}>
             <div>
               <div className="BlogInfocommenter">

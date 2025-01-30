@@ -14,32 +14,9 @@ import Home from './Pages/Home';
 import Main from './Pages/Main';
 import BlogInfo from './Pages/BlogInfo/BlogInfo';
 import CreateBlog from './Pages/CreateBlog/CreateBlog';
+import Editblog from './Pages/Editblog/Editblog';
 import Profile from './Pages/Profile/Profile';
-
 const RootApp = () => {
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         'https://ping-server-2.onrender.com/auth/authCheck',
-  //         {
-  //           method: 'GET',
-  //           credentials: 'include',
-  //         }
-  //       );
-
-  //       if (response.ok) { 
-  //         toast.success('Happy to see you again Logged');
-  //       } else { 
-  //         toast.success(`Welcome To Ng's Blog. SignUp`);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking auth:');
-  //     }
-  //   };
-
-  //   checkAuth();
-  // }, []);
 
   return (
     <>
@@ -82,6 +59,15 @@ const appRouter = createBrowserRouter([
           <>
             <HeaderMain />
             <BlogInfo />
+          </>
+        ),
+      },
+      {
+        path: '/Editblog',
+        element: (
+          <>
+            <HeaderMain />
+            <Editblog />
           </>
         ),
       },
