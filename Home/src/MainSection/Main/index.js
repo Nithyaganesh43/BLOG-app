@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaHeart, FaShare, FaComment } from 'react-icons/fa';
-
+import { FaHeart, FaShare, FaComment } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom';
 const MainSectionStyle = styled.section`
   width: 100vw;
   min-height: 100vh;
@@ -17,11 +17,16 @@ const MainSectionStyle = styled.section`
 const BlogContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 60vw;
+  justify-content: center;
+  width: 80vw;
   background-color: #1e1e1e;
   padding: 3rem;
   border-radius: 10px;
   gap: 1rem;
+  @media (max-width: 1024px) {
+    width: 90vw;
+    padding: 2rem;
+  }
   @media (max-width: 768px) {
     width: 95vw;
     padding: 1rem;
@@ -32,13 +37,12 @@ const Blog = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 300px;
-  max-width: 300px;
+  width: 100%;
+  max-width: 350px;
   background-color: #2a2a2a;
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
   flex: 1 1 300px;
   @media (max-width: 768px) {
     width: 100%;
@@ -49,7 +53,7 @@ const Blog = styled.div`
     margin: 10px 0;
   }
   p {
-    font-size: 12px;
+    font-size: 14px;
   }
 `;
 
@@ -72,13 +76,13 @@ const Author = styled.div`
   display: flex;
   align-items: center;
   img {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin-right: 10px;
   }
   span {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: #bbb;
   }
 `;
@@ -107,8 +111,8 @@ const IconButton = styled.button`
 
 const MainSection = () => {
   const [blogs, setBlogs] = useState([]);
-  const [userId, setUserId] = useState(null);
-
+  const [userId, setUserId] = useState(null); 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -118,6 +122,8 @@ const MainSection = () => {
         );
         const userData = await response.json();
         setUserId(userData.UserId);
+        localStorage.setItem('user', JSON.stringify(userData));
+ 
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -132,6 +138,7 @@ const MainSection = () => {
           'https://ping-server-2.onrender.com/getAllBlogs'
         );
         const data = await response.json();
+        console.log(data);
         setBlogs(
           data.map((blog) => ({
             ...blog,
@@ -177,10 +184,30 @@ const MainSection = () => {
       <BlogContainer>
         {blogs.map((blog) => (
           <Blog key={blog._id}>
-            <CoverImage src={blog.coverImgUrl} alt={blog.title} />
-            <h3>{blog.title}</h3>
-            <h5>{blog.description}</h5>
-            <p>Updated: {new Date(blog.updatedAt).toLocaleString()}</p>
+            <CoverImage
+              src={blog.coverImgUrl}
+              alt={blog.title}
+              onClick={() => navigate(`/blog/${blog._id}`)}
+            />
+            <h3 onClick={() => navigate(`/blog/${blog._id}`)}>{blog.title}</h3>
+            <h5 onClick={() => navigate(`/blog/${blog._id}`)}>
+              {blog.description}
+            </h5>
+            <p onClick={() => navigate(`/blog/${blog._id}`)}>
+              Updated: {new Date(blog.updatedAt).toLocaleString()}
+            </p>
+            <p
+              onClick={() => navigate(`/blog/${blog._id}`)}
+              style={{
+                color: 'pink',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) =>
+                (e.target.style.textDecoration = 'underline')
+              }
+              onMouseLeave={(e) => (e.target.style.textDecoration = 'none')}>
+              Read Full Blog
+            </p>
             <FooterSection>
               <Author>
                 <img
@@ -199,10 +226,25 @@ const MainSection = () => {
                   {blog.likes.length}
                 </IconButton>
                 <IconButton>
-                  <FaShare />
+                  <FaShare
+                    onClick={async () => {
+                      try {
+                        await navigator.share({
+                          title: 'Check this out!',
+                          text: 'Interesting link:',
+                          url: 'http://localhost:3000/blog/' + blog._id,
+                        });
+                      } catch (err) {
+                        console.error('Sharing failed', err);
+                      }
+                    }}
+                  />
                 </IconButton>
                 <IconButton>
-                  <FaComment /> 0
+                  <FaComment
+                    onClick={() => navigate(`/blog/${blog._id}`)}
+                  />{' '}
+                  {blog?.comments?.length}
                 </IconButton>
               </ButtonContainer>
             </FooterSection>

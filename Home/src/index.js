@@ -6,16 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { GlobalStyle } from './globalStyles';
 import Contact from './components/Contact/index';
-
-const Header = lazy(() => import('./components/Header/index'));
-
-const HeaderMain = lazy(() => import('./components/HeaderMain/index'));
-const TermsAndConditions = lazy(() =>
-  import('./Pages/TermsAndConditions/index')
-);
-const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy/index'));
-const Home = lazy(() => import('./Pages/Home'));
-const Main = lazy(() => import('./Pages/Main'));
+import Header from './components/Header/index';
+import HeaderMain from './components/HeaderMain/index';
+import TermsAndConditions from './Pages/TermsAndConditions/index';
+import PrivacyPolicy from './Pages/PrivacyPolicy/index';
+import Home from './Pages/Home';
+import Main from './Pages/Main';
+import BlogInfo from './Pages/BlogInfo/BlogInfo';
+import CreateBlog from './Pages/CreateBlog/CreateBlog';
+import Profile from './Pages/Profile/Profile';
 
 const RootApp = () => {
   // useEffect(() => {
@@ -74,6 +73,33 @@ const appRouter = createBrowserRouter([
           <>
             <HeaderMain />
             <Main />
+          </>
+        ),
+      },
+      {
+        path: '/blog/:id',
+        element: (
+          <>
+            <HeaderMain />
+            <BlogInfo />
+          </>
+        ),
+      },
+      {
+        path: '/CreateBlog',
+        element: (
+          <>
+            <HeaderMain />
+            <CreateBlog />
+          </>
+        ),
+      },
+      {
+        path: '/Profile',
+        element: (
+          <>
+            <HeaderMain />
+            <Profile />
           </>
         ),
       },

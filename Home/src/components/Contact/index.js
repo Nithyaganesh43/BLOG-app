@@ -162,7 +162,7 @@ const Contact = () => {
 
   return (
     <ContactSection id="contact">
-      <Title>Get in touch</Title>
+      <Title id='commmmment'>Get in touch</Title>
       
       <Form>
         <Row>

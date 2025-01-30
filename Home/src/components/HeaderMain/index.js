@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import userIcon from '../../assets/profile.png';
+import styled from 'styled-components'; 
 import penIcon from '../../assets/write.png';
-
+import home from '../../assets/home.png';
+import { useNavigate } from 'react-router-dom';
 const Headers = styled.header`
   display: flex;
   justify-content: space-between;
@@ -37,6 +37,7 @@ const Nav = styled.div`
   gap: 1rem;
 
   img {
+  margin: 0px 15px ;
     width: 2.5rem;
     height: 2.5rem;
     cursor: pointer;
@@ -91,25 +92,44 @@ const ProfileMenu = styled.div`
     }
   }
 `;
+const fetchUserInfo = async (setUser) => {
+  try {
+    const response = await fetch(
+      'https://ping-server-2.onrender.com/getMyInfo',
+      { credentials: 'include' }
+    );
+    const userData = await response.json();
+    setUser(userData);
+     
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+  }
+};
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
-    }
-  };
-
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    fetchUserInfo(setUser);
+  }, [setUser]);
+  console.log(user);
 
-  return (
+//   const handleClickOutside = (event) => {
+//     if (menuRef.current && !menuRef.current.contains(event.target)) {
+//       setMenuOpen(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => {
+//       document.removeEventListener('mousedown', handleClickOutside);
+//     };
+//   }, []);
+
+  return user ? (
     <Headers>
       <Logo>
         <img
@@ -121,23 +141,42 @@ const Header = () => {
 
       <Nav>
         <div>
-          <img src={penIcon} alt="Write Icon" />
+          <img
+            src={home}
+            alt="Write Icon"
+            onClick={() => {
+              window.location.href = '/home';
+            }}
+          />
+          <img
+            src={penIcon}
+            alt="Write Icon"
+            onClick={() => {
+              window.location.href = '/CreateBlog';
+            }}
+          />
         </div>
         <div>
           <ProfileBtn onClick={() => setMenuOpen((prev) => !prev)}>
-            <img src={userIcon} alt="Profile Icon" />
+            <img src={user.profileUrl} alt="Profile Icon" />
           </ProfileBtn>
         </div>
       </Nav>
 
       <ProfileMenu ref={menuRef} open={menuOpen}>
-        <img src={userIcon} alt="User" />
-        <p>User Name</p>
-        <p>user@example.com</p>
-        <button>My Profile</button>
+        <img src={user.profileUrl} alt="User" />
+        <p>{user.fullName}</p>
+        <button
+          onClick={() => {
+            navigate('/Profile');
+          }}>
+          My Profile
+        </button>
         <button>Logout</button>
       </ProfileMenu>
     </Headers>
+  ) : (
+    <>Loading</>
   );
 };
 

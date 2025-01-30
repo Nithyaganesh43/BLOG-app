@@ -1,0 +1,110 @@
+.BlogInfocontainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #f9f9f9;
+}
+
+.BlogInfocover-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.BlogInfocontent h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.BlogInfocontent p {
+  font-size: 16px;
+  line-height: 1.BlogInfo5;
+  margin-bottom: 15px;
+}
+
+.BlogInfofooter-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.BlogInfofooter-section button{
+    margin-top: 5px;
+   color: red;
+}
+.BlogInfoauthor {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.BlogInfoauthor img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.BlogInfoicon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex; 
+}
+
+.BlogInfocomment-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #ababab;
+  font-size: larger;
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   font-weight: 500;
+}
+
+.BlogInfobutton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.BlogInfocomment {
+    color: black;
+  background-color: #ababab;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.BlogInfocomment #cmt{
+   font-size: larger;
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   font-weight: 500;
+}
+.BlogInfocommenter {
+  display: flex;
+  align-items: center;
+}
+
+.BlogInfocommenter img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.BlogInfocommenter p{  
+  margin-top: 15px;
+}
+
+.BlogInfoactions {
+  display: flex;
+  justify-content: flex-end;
+} 
