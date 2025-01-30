@@ -110,25 +110,11 @@ const MainSection = () => {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          'https://ping-server-2.onrender.com/getAllBlogs'
-        );
-        const data = await response.json();
-        setBlogs(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     const fetchUserInfo = async () => {
       try {
         const response = await fetch(
           'https://ping-server-2.onrender.com/getMyInfo',
-          {
-            credentials: 'include',
-          }
+          { credentials: 'include' }
         );
         const userData = await response.json();
         setUserId(userData.UserId);
@@ -136,33 +122,51 @@ const MainSection = () => {
         console.error('Error fetching user info:', error);
       }
     };
-
-    fetchData();
     fetchUserInfo();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          'https://ping-server-2.onrender.com/getAllBlogs'
+        );
+        const data = await response.json();
+        setBlogs(
+          data.map((blog) => ({
+            ...blog,
+            likedByUser: blog.likes.includes(userId),
+          }))
+        );
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
+
   const like = async (id) => {
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((blog) =>
+        blog._id === id
+          ? {
+              ...blog,
+              likes: blog.likes.includes(userId)
+                ? blog.likes.filter((like) => like !== userId)
+                : [...blog.likes, userId],
+            }
+          : blog
+      )
+    );
     try {
       await fetch('https://ping-server-2.onrender.com/addLikeBlog', {
         method: 'POST',
         body: JSON.stringify({ blogId: id }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
-      setBlogs((prevBlogs) =>
-        prevBlogs.map((blog) =>
-          blog._id === id
-            ? {
-                ...blog,
-                likes: blog.likes.includes(userId)
-                  ? blog.likes.filter((like) => like !== userId)
-                  : [...blog.likes, userId],
-              }
-            : blog
-        )
-      );
     } catch (error) {
       console.error('Error liking blog:', error);
     }
