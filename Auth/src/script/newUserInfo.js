@@ -27,6 +27,34 @@ function myAlert(icon, title) {
     },
   });
 }
+let profileUrl=null;
+function resizeAndConvert() {
+  let fileInput = document.getElementById('fileInput');
+  if (fileInput.files.length === 0) return;
+
+  let file = fileInput.files[0];
+  let reader = new FileReader();
+
+  reader.onload = function (event) {
+    let img = new Image();
+    img.src = event.target.result;
+
+    img.onload = function () {
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+
+      canvas.width = 200;
+      canvas.height = 200;
+      ctx.drawImage(img, 0, 0, 200, 200);
+
+      let base64String = canvas.toDataURL('image/jpeg', 0.8);  
+      document.getElementById('profileImage').src = base64String;  
+      profileUrl=base64String;
+    };
+  }; 
+  reader.readAsDataURL(file);
+}
+
 window.onload = async function () {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -87,6 +115,10 @@ window.onload = async function () {
       myAlert('error', 'Full name must be at least 3 characters long.');
       return false;
     }
+    if (!profileUrl) {
+      myAlert('error', 'Choose a Profile');
+      return false;
+    }
     if (fullName.length > 50) {
       myAlert('error', 'Full name cannot exceed 50 characters.');
       return false;
@@ -137,7 +169,7 @@ myAlert('info','Validating');
       await axios
         .post(
           'https://ping-server-2.onrender.com/auth/signupSuccessful',
-          { fullName, userName, password, email, platform:'Blog' },
+          { fullName, userName, password, email, platform:'Blog' ,profileUrl},
           {
             withCredentials: true,
             headers: {

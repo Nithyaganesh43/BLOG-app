@@ -15,9 +15,14 @@
 <body>
     <div class="app">
         <div class="container">
-            <img src="https://www.wizbrand.com/tutorials/wp-content/uploads/2021/12/featured.jpg"
-                alt="Profile Picture" class="profile-img" id="google_logo">
-            <form action="#" method="POST">
+            <form action="" method="POST">
+                <div id="profileContainer" onclick="document.getElementById('fileInput').click()">
+                    <img id="profileImage"
+                    src="https://cdn3.iconfinder.com/data/icons/profile-and-cv/100/profile_account_user-05-512.png"
+                    alt="Profile">
+                </div>
+                <p id="changeProfile">Change Profile</p>
+                <input type="file" id="fileInput" accept="image/*" onchange="resizeAndConvert()">
                 <h1>Profile</h1>
 
                 <div class="input-group group">
@@ -58,10 +63,10 @@
                     <label for="confirm-password">Confirm Password</label>
                 </div>
 
-             
 
 
-                
+
+
                 <button type="button" id="submit-button" class="btnClick">
                     Submit
                     <div class="star-1">
