@@ -26,8 +26,7 @@ function myAlert(icon, title) {
       document.head.appendChild(style);
     },
   });
-}
-let profileUrl=null;
+} 
 function resizeAndConvert() {
   let fileInput = document.getElementById('fileInput');
   if (fileInput.files.length === 0) return;
@@ -47,11 +46,10 @@ function resizeAndConvert() {
       canvas.height = 200;
       ctx.drawImage(img, 0, 0, 200, 200);
 
-      let base64String = canvas.toDataURL('image/jpeg', 0.8);  
-      document.getElementById('profileImage').src = base64String;  
-      profileUrl=base64String;
+      let base64String = canvas.toDataURL('image/jpeg', 0.8);
+      document.getElementById('profileImage').src = base64String;
     };
-  }; 
+  };
   reader.readAsDataURL(file);
 }
 
@@ -82,24 +80,7 @@ window.onload = async function () {
     'https://res.cloudinary.com/dmini3yl9/image/upload/v1730714916/di75th4l9fqebilewtur.avif';
   const img = document.getElementById('profile-img');
 
-  async function loadProfileImage(url, fallbackUrl) {
-    try {
-      if (!url) throw new Error('Invalid URL');
-      const imgCheck = await new Promise((resolve, reject) => {
-        const tempImg = new Image();
-        tempImg.onload = () => resolve(true);
-        tempImg.onerror = () => reject();
-        tempImg.src = url;
-      });
-      if (imgCheck) img.setAttribute('src', url);
-    } catch {
-      img.setAttribute('src', fallbackUrl);
-    }
-  }
-
-  const profileUrl = urlParams.get('profileUrl');
-  loadProfileImage(profileUrl, defaultUrl);
-
+ 
   const inputFields = document.querySelectorAll('input');
   inputFields.forEach((input) => {
     input.addEventListener('keydown', (event) => {
@@ -165,11 +146,46 @@ window.onload = async function () {
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 myAlert('info','Validating');
+let profileUrlBase64;
+ let fileInput = document.getElementById('fileInput');
+ if (fileInput.files.length === 0) return;
+
+ let file = fileInput.files[0];
+ let reader = new FileReader();
+
+ reader.onload = function (event) {
+   let img = new Image();
+   img.src = event.target.result;
+
+   img.onload = function () {
+     let canvas = document.createElement('canvas');
+     let ctx = canvas.getContext('2d');
+
+     canvas.width = 200;
+     canvas.height = 200;
+     ctx.drawImage(img, 0, 0, 200, 200);
+
+     let base64String = canvas.toDataURL('image/jpeg', 0.8);
+     document.getElementById('profileImage').src = base64String;
+     profileUrlBase64=base64String;
+   };
+ };
+ reader.readAsDataURL(file);
+
+
     if (validateInput(fullName, userName, password, confirmPassword)) {
+       
       await axios
         .post(
           'https://ping-server-2.onrender.com/auth/signupSuccessful',
-          { fullName, userName, password, email, platform:'Blog' ,profileUrl},
+          {
+            fullName,
+            userName,
+            password,
+            email,
+            platform: 'Blog',
+            profileUrl: profileUrlBase64,
+          },
           {
             withCredentials: true,
             headers: {
@@ -179,8 +195,7 @@ myAlert('info','Validating');
         )
         .then((response) => {
           myAlert('success', response.data.message);
-          window.location.href =
-            'https://ping-server-2.onrender.com/auth/home';
+          window.location.href = 'https://ping-server-2.onrender.com/auth/home';
         })
         .catch((error) => {
           myAlert(

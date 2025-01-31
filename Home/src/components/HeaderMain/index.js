@@ -124,7 +124,7 @@ const Header = () => {
 //       document.removeEventListener('mousedown', handleClickOutside);
 //     };
 //   }, []);
-
+console.log(user)
   return user ? (
     <Headers>
       <Logo>
@@ -168,14 +168,17 @@ const Header = () => {
           }}>
           My Profile
         </button>
-        <button onClick={async()=>{
-          await fetch('https://ping-server-2.onrender.com/auth/logout', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-          });
-          navigate('/');
-        }}>Logout</button>
+        <button
+          onClick={async () => {
+            await fetch('https://ping-server-2.onrender.com/auth/logout', {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+            });
+            navigate('/');
+          }}>
+          Logout
+        </button>
       </ProfileMenu>
     </Headers>
   ) : (
