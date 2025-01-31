@@ -117,7 +117,7 @@ const About = () => {
             <CurvedLine />
             <Text>
               Welcome to  Ng's Blog , your digital sanctuary for
-              creativity, connection, and inspiration. Founded in 2024, we are
+              creativity, connection, and inspiration. Founded in 2025, we are
               here to empower everyone to share their stories, explore new
               perspectives, and connect with a vibrant community of bloggers
               worldwide.
