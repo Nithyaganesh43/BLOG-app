@@ -162,8 +162,8 @@ const Contact = () => {
 
   return (
     <ContactSection id="contact">
-      <Title id='commmmment'>Get in touch</Title>
-      
+      <Title id="commmmment">Subscribe Us</Title>
+
       <Form>
         <Row>
           <input id={'name'} name="name" type="text" placeholder="your name" />
