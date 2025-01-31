@@ -19,14 +19,15 @@ const fetchUserInfo = async (setUser) => {
 
 const fetchBlogData =async (id, setBlog) => {
  await fetch('https://ping-server-2.onrender.com/getOneFullBlog', {
-    method: 'POST',
-    body: JSON.stringify({ blogId: id }),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      setBlog(data);
-    });
+   method: 'POST',
+   body: JSON.stringify({ blogId: id }),
+   headers: { 'Content-Type': 'application/json' },
+   credentials: 'include',
+ })
+   .then((res) => res.json())
+   .then((data) => {
+     setBlog(data);
+   });
 };
 
 
@@ -99,6 +100,7 @@ const like = async (id) => {
     await fetch('https://ping-server-2.onrender.com/addCommentBlog', {
       method: 'POST',
       body: JSON.stringify({ blogId: id, message: msg }),
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     }); 
     fetchBlogData(id, setBlog);
@@ -113,6 +115,7 @@ const like = async (id) => {
     await fetch('https://ping-server-2.onrender.com/deleteCommentBlog', {
       method: 'POST',
       body: JSON.stringify({ blogId: id, commentId }),
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     }); 
    await fetchBlogData(id, setBlog);

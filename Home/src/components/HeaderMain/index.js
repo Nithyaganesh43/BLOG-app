@@ -170,8 +170,9 @@ const Header = () => {
         </button>
         <button onClick={async()=>{
           await fetch('https://ping-server-2.onrender.com/auth/logout', {
-            method: 'GET', 
-            headers: { 'Content-Type': 'application/json' }, 
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
           });
           navigate('/');
         }}>Logout</button>

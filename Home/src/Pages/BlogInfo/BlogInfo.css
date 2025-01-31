@@ -14,13 +14,13 @@
 }
 
 .BlogInfocontent h1 {
-  font-size: 28px;
+  font-size: 32px;
   margin-bottom: 10px;
 }
 
 .BlogInfocontent p {
-  font-size: 16px;
-  line-height: 1.BlogInfo5;
+  font-size: 18px;
+  line-height: 1.5;
   margin-bottom: 15px;
 }
 
@@ -95,9 +95,9 @@
 }
 
 .BlogInfocommenter img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 5%;
   margin-right: 10px;
 }
 .BlogInfocommenter p{  
