@@ -110,17 +110,21 @@ const IconButton = styled.button`
 `;
 
 const MainSection = () => {
+  console.log("rendered start")
   const [blogs, setBlogs] = useState([]);
   const [userId, setUserId] = useState(null); 
   const navigate = useNavigate();
   useEffect(() => {
     const fetchUserInfo = async () => {
+  console.log('fetchUserInfo start');
       try {
         const response = await fetch(
           'https://ping-server-2.onrender.com/getMyInfo',
           { credentials: 'include' }
         );
         const userData = await response.json();
+        
+  console.log('fetchUserInfo end', userData);
         setUserId(userData.UserId);
         localStorage.setItem('user', JSON.stringify(userData));
  
@@ -134,12 +138,16 @@ const MainSection = () => {
   useEffect(() => {
     
     const fetchData = async () => {
+  console.log('fetchData start' );
+
       try {
         const response = await fetch(
           'https://ping-server-2.onrender.com/getAllBlogs',
           { credentials: 'include' }
         );
         const data = await response.json(); 
+  console.log('fetchData end',data);
+
         setBlogs(
           data.map((blog) => ({
             ...blog,
@@ -153,7 +161,7 @@ const MainSection = () => {
     if (userId) {
       fetchData();
     }
-  }, [userId]);
+  }, []);
 
   const like = async (id) => {
     setBlogs((prevBlogs) =>
