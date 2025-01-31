@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaHeart, FaShare, FaComment } from 'react-icons/fa'; 
+import { FaHeart, FaShare, FaComment } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 const MainSectionStyle = styled.section`
   width: 100vw;
@@ -110,24 +110,23 @@ const IconButton = styled.button`
 `;
 
 const MainSection = () => {
-  console.log("rendered start")
+  console.log('rendered start');
   const [blogs, setBlogs] = useState([]);
-  const [userId, setUserId] = useState(null); 
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchUserInfo = async () => {
-  console.log('fetchUserInfo start');
+      console.log('fetchUserInfo start');
       try {
         const response = await fetch(
           'https://ping-server-2.onrender.com/getMyInfo',
           { credentials: 'include' }
         );
         const userData = await response.json();
-        
-  console.log('fetchUserInfo end', userData);
+
+        console.log('fetchUserInfo end', userData);
         setUserId(userData.UserId);
         localStorage.setItem('user', JSON.stringify(userData));
- 
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -136,17 +135,16 @@ const MainSection = () => {
   }, []);
 
   useEffect(() => {
-    
     const fetchData = async () => {
-  console.log('fetchData start' );
+      console.log('fetchData start');
 
       try {
         const response = await fetch(
           'https://ping-server-2.onrender.com/getAllBlogs',
           { credentials: 'include' }
         );
-        const data = await response.json(); 
-  console.log('fetchData end',data);
+        const data = await response.json();
+        console.log('fetchData end', data);
 
         setBlogs(
           data.map((blog) => ({
@@ -158,8 +156,14 @@ const MainSection = () => {
         console.error('Error fetching data:', error);
       }
     };
+    console.log("fetch data rendered");
     if (userId) {
+    console.log('fetch data passed');
+
       fetchData();
+    }else{
+      
+    console.log('fetch data failed');
     }
   }, []);
 
@@ -242,8 +246,7 @@ const MainSection = () => {
                           title: 'Check this out!',
                           text: 'Interesting link:',
                           url:
-                            'https://blog-app-home.vercel.app/blog/' +
-                            blog._id,
+                            'https://blog-app-home.vercel.app/blog/' + blog._id,
                         });
                       } catch (err) {
                         console.error('Sharing failed', err);
@@ -252,9 +255,7 @@ const MainSection = () => {
                   />
                 </IconButton>
                 <IconButton>
-                  <FaComment
-                    onClick={() => navigate(`/blog/${blog._id}`)}
-                  />{' '}
+                  <FaComment onClick={() => navigate(`/blog/${blog._id}`)} />{' '}
                   {blog?.comments?.length}
                 </IconButton>
               </ButtonContainer>
