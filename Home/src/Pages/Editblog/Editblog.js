@@ -101,6 +101,7 @@ if(blog)
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(blogData),
+          credentials: 'include',
         }
       );
 

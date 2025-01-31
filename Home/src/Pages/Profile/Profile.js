@@ -135,7 +135,10 @@ const Profile = () => {
  const fetchData = async (setBlogs) => {
    try {
      const response = await fetch(
-       'https://ping-server-2.onrender.com/getAllBlogs'
+       'https://ping-server-2.onrender.com/getAllBlogs',
+       {
+         credentials: 'include',
+       }
      );
      const data = await response.json();
 
@@ -153,6 +156,7 @@ const deleteBlog = async (id) => {
   await fetch('https://ping-server-2.onrender.com/deleteBlog', {
     method: 'POST',
     body: JSON.stringify({ blogId: id }),
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
   });
   fetchData(setBlogs);
