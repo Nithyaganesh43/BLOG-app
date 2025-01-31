@@ -76,6 +76,9 @@ window.onload = async function () {
   const platform = urlParams.get('platform');
   const email = urlParams.get('email');
   let fullname = urlParams.get('fullname') || '';
+  if(fullname==undefined){
+    fullname='';
+  }
 
   if (fullname) document.getElementById('fullName').value = fullname;
   if (email) {
