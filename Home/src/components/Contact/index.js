@@ -142,7 +142,7 @@ const Contact = () => {
 
     try {
       const response = await fetch(
-        'https://server.markethealers.com/markethealers/contact',
+        'https://ping-server-2.onrender.com/contact',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

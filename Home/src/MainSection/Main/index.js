@@ -184,11 +184,10 @@ const MainSection = () => {
       }
     };
     fetchUserInfo();
-  }, []); // Only runs once, when the component mounts
+  }, []); 
 
   useEffect(() => {
-    if (userId) {
-      // Ensure fetchData runs only if userId is available
+    if (userId) { 
       const fetchData = async () => {
         console.log('fetchData start');
 
@@ -215,7 +214,7 @@ const MainSection = () => {
     } else {
       console.log('userId not available, fetchData skipped');
     }
-  }, [userId]); // Runs when userId is updated
+  }, [userId]); 
 
   const like = async (id) => {
     setBlogs((prevBlogs) =>
