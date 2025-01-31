@@ -132,13 +132,14 @@ const MainSection = () => {
   }, []);
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const response = await fetch(
-          'https://ping-server-2.onrender.com/getAllBlogs'
+          'https://ping-server-2.onrender.com/getAllBlogs',
+          { credentials: 'include' }
         );
-        const data = await response.json();
-        console.log(data);
+        const data = await response.json(); 
         setBlogs(
           data.map((blog) => ({
             ...blog,
