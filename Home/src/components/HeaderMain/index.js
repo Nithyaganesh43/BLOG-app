@@ -92,17 +92,21 @@ const ProfileMenu = styled.div`
     }
   }
 `;
+
 const fetchUserInfo = async (setUser) => {
   try {
-    
-    const userData = JSON.parse(localStorage.getItem('user')); 
+    const response = await fetch(
+      'https://ping-server-2.onrender.com/getMyInfo',
+      { credentials: 'include' }
+    );
+    const userData = await response.json();
     setUser(userData);
-     
+    localStorage.setItem('user', JSON.stringify(userData));
   } catch (error) {
     console.error('Error fetching user info:', error);
   }
-};
-
+}; 
+ 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -112,19 +116,18 @@ const Header = () => {
     fetchUserInfo(setUser);
   }, [setUser]); 
 
-//   const handleClickOutside = (event) => {
-//     if (menuRef.current && !menuRef.current.contains(event.target)) {
-//       setMenuOpen(false);
-//     }
-//   };
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
 
-//   useEffect(() => {
-//     document.addEventListener('mousedown', handleClickOutside);
-//     return () => {
-//       document.removeEventListener('mousedown', handleClickOutside);
-//     };
-//   }, []);
-console.log(user)
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); 
   return user ? (
     <Headers>
       <Logo>
