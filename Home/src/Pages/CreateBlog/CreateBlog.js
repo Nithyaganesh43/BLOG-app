@@ -38,9 +38,9 @@ const CreateBlog = () => {
     if (content) {
       const lines = content.split('\n');
       lines.forEach((line) => {
-        if (line.trim().startsWith('***') && line.trim().endsWith('***')) {
+        if (line.trim().startsWith('"') && line.trim().endsWith('"')) {
           preview += `<div><h1>${line.trim().slice(3, -3)}</h1></div>`;
-        } else if (line.trim().startsWith('**') && line.trim().endsWith('**')) {
+        } else if (line.trim().startsWith(`'`) && line.trim().endsWith(`'`)) {
           preview += `<div><h2>${line.trim().slice(2, -2)}</h2></div>`;
         } else if (line.trim().startsWith('$') && line.trim().endsWith('$')) {
           preview += `<div><img style="max-width:300px; max-height:300px; border-radius:10px;" src="${line
@@ -154,8 +154,8 @@ const CreateBlog = () => {
           onChange={(e) => setContent(e.target.value)}></textarea>
         <p>Rules of writing content</p>
         <ul className="rules-list">
-          <li>Heading ***Heading***</li>
-          <li>SubHeadings **SubHeadings**</li>
+          <li>Heading "Heading"</li>
+          <li>SubHeadings 'SubHeadings'</li>
           <li>PlainText plainText</li>
           <li>Image $imageUrl$</li>
           <li>Links #linkUrl#</li>
