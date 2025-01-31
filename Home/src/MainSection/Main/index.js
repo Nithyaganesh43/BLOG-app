@@ -114,6 +114,58 @@ const MainSection = () => {
   const [blogs, setBlogs] = useState([]);
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
+  //   useEffect(() => {
+
+  //   }, []);
+
+  // useEffect(async()=>{
+  //    const fetchUserInfo = async () => {
+  //      console.log('fetchUserInfo start');
+  //      try {
+  //        const response = await fetch(
+  //          'https://ping-server-2.onrender.com/getMyInfo',
+  //          { credentials: 'include' }
+  //        );
+  //        const userData = await response.json();
+
+  //        console.log('fetchUserInfo end', userData);
+  //        setUserId(userData.UserId);
+  //        localStorage.setItem('user', JSON.stringify(userData));
+  //      } catch (error) {
+  //        console.error('Error fetching user info:', error);
+  //      }
+  //    };
+  //    await fetchUserInfo();
+  //    const fetchData = async () => {
+  //      console.log('fetchData start');
+
+  //      try {
+  //        const response = await fetch(
+  //          'https://ping-server-2.onrender.com/getAllBlogs',
+  //          { credentials: 'include' }
+  //        );
+  //        const data = await response.json();
+  //        console.log('fetchData end', data);
+
+  //        setBlogs(
+  //          data.map((blog) => ({
+  //            ...blog,
+  //            likedByUser: blog.likes.includes(userId),
+  //          }))
+  //        );
+  //      } catch (error) {
+  //        console.error('Error fetching data:', error);
+  //      }
+  //    };
+  //    console.log('fetch data rendered');
+  //    if (userId) {
+  //      console.log('fetch data passed');
+
+  //      fetchData();
+  //    } else {
+  //      console.log('fetch data failed');
+  //    }
+  // },[userId]);
   useEffect(() => {
     const fetchUserInfo = async () => {
       console.log('fetchUserInfo start');
@@ -132,38 +184,38 @@ const MainSection = () => {
       }
     };
     fetchUserInfo();
-  }, []);
- 
-    const fetchData = async () => {
-      console.log('fetchData start');
+  }, []); // Only runs once, when the component mounts
 
-      try {
-        const response = await fetch(
-          'https://ping-server-2.onrender.com/getAllBlogs',
-          { credentials: 'include' }
-        );
-        const data = await response.json();
-        console.log('fetchData end', data);
-
-        setBlogs(
-          data.map((blog) => ({
-            ...blog,
-            likedByUser: blog.likes.includes(userId),
-          }))
-        );
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    console.log("fetch data rendered");
+  useEffect(() => {
     if (userId) {
-    console.log('fetch data passed');
+      // Ensure fetchData runs only if userId is available
+      const fetchData = async () => {
+        console.log('fetchData start');
 
+        try {
+          const response = await fetch(
+            'https://ping-server-2.onrender.com/getAllBlogs',
+            { credentials: 'include' }
+          );
+          const data = await response.json();
+          console.log('fetchData end', data);
+
+          setBlogs(
+            data.map((blog) => ({
+              ...blog,
+              likedByUser: blog.likes.includes(userId),
+            }))
+          );
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      console.log('fetch data rendered');
       fetchData();
-    }else{
-      
-    console.log('fetch data failed');
-    } 
+    } else {
+      console.log('userId not available, fetchData skipped');
+    }
+  }, [userId]); // Runs when userId is updated
 
   const like = async (id) => {
     setBlogs((prevBlogs) =>
