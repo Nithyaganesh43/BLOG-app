@@ -156,7 +156,7 @@ const like = async (id) => {
                 await navigator.share({
                   title: 'Check this out!',
                   text: 'Interesting link:',
-                  url: 'http://localhost:3000/blog/' + blog._id,
+                  url: 'https://blog-app-home.vercel.app/blog/' + blog._id,
                 });
               } catch (err) {
                 console.error('Sharing failed', err);
