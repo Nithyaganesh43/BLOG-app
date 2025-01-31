@@ -133,8 +133,7 @@ const MainSection = () => {
     };
     fetchUserInfo();
   }, []);
-
-  useEffect(() => {
+ 
     const fetchData = async () => {
       console.log('fetchData start');
 
@@ -164,8 +163,7 @@ const MainSection = () => {
     }else{
       
     console.log('fetch data failed');
-    }
-  }, []);
+    } 
 
   const like = async (id) => {
     setBlogs((prevBlogs) =>
