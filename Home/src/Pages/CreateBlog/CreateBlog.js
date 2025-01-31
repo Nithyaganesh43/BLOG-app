@@ -39,9 +39,9 @@ const CreateBlog = () => {
       const lines = content.split('\n');
       lines.forEach((line) => {
         if (line.trim().startsWith('"') && line.trim().endsWith('"')) {
-          preview += `<div><h1>${line.trim().slice(3, -3)}</h1></div>`;
+          preview += `<div><h1>${line.trim().slice(1, -1)}</h1></div>`;
         } else if (line.trim().startsWith(`'`) && line.trim().endsWith(`'`)) {
-          preview += `<div><h2>${line.trim().slice(2, -2)}</h2></div>`;
+          preview += `<div><h2>${line.trim().slice(1, -1)}</h2></div>`;
         } else if (line.trim().startsWith('$') && line.trim().endsWith('$')) {
           preview += `<div><img style="max-width:300px; max-height:300px; border-radius:10px;" src="${line
             .trim()
