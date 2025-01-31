@@ -10,79 +10,55 @@ function myAlert(icon, title) {
     allowEscapeKey: false,
     showConfirmButton: false,
     showCloseButton: true,
-    customClass: {
-      popup: 'custom-toast',
-    },
+    customClass: { popup: 'custom-toast' },
     willOpen: () => {
       const style = document.createElement('style');
-      style.innerHTML = `
-                        .custom-toast {
-                            font-family: 'Arial', sans-serif;
-                            font-size: 12px;
-                            background-color: rgb(255, 255, 255);
-                            color: #262626;
-                        }
-                    `;
+      style.innerHTML = `.custom-toast { font-family: 'Arial', sans-serif; font-size: 12px; background-color: rgb(255, 255, 255); color: #262626; }`;
       document.head.appendChild(style);
     },
   });
-} 
-function resizeAndConvert() {
-  let fileInput = document.getElementById('fileInput');
-  if (fileInput.files.length === 0) return;
+}
 
-  let file = fileInput.files[0];
-  let reader = new FileReader();
-
-  reader.onload = function (event) {
-    let img = new Image();
-    img.src = event.target.result;
-
-    img.onload = function () {
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-
-      canvas.width = 200;
-      canvas.height = 200;
-      ctx.drawImage(img, 0, 0, 200, 200);
-
-      let base64String = canvas.toDataURL('image/jpeg', 0.8);
-      document.getElementById('profileImage').src = base64String;
+function resizeAndConvert(file) {
+  return new Promise((resolve) => {
+    let reader = new FileReader();
+    reader.onload = function (event) {
+      let img = new Image();
+      img.src = event.target.result;
+      img.onload = function () {
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 200;
+        canvas.height = 200;
+        ctx.drawImage(img, 0, 0, 200, 200);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
     };
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+  });
 }
 
 window.onload = async function () {
   const urlParams = new URLSearchParams(window.location.search);
-
   const platform = urlParams.get('platform');
   const email = urlParams.get('email');
-  let fullname = urlParams.get('fullname');
-
-  if ('undefined' == fullname) {
-    fullname = '';
-  }
+  let fullname = urlParams.get('fullname') || '';
 
   if (fullname) document.getElementById('fullName').value = fullname;
   if (email) {
-    const emailField = document.getElementById('email');
-    emailField.value = email;
-    emailField.readOnly = true;
+    document.getElementById('email').value = email;
+    document.getElementById('email').readOnly = true;
   }
   if (platform) {
-    const platformField = document.getElementById('platform');
-    platformField.value = platform;
-    platformField.readOnly = true;
+    document.getElementById('platform').value = platform;
+    document.getElementById('platform').readOnly = true;
   }
 
   const defaultUrl =
     'https://res.cloudinary.com/dmini3yl9/image/upload/v1730714916/di75th4l9fqebilewtur.avif';
   const img = document.getElementById('profile-img');
 
- 
-  const inputFields = document.querySelectorAll('input');
-  inputFields.forEach((input) => {
+  document.querySelectorAll('input').forEach((input) => {
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         document.getElementById('submit-button').click();
@@ -90,91 +66,64 @@ window.onload = async function () {
       }
     });
   });
-  function validateInput(fullName, userName, password, confirmPassword) {
-    
-    if (fullName.length < 3) {
-      myAlert('error', 'Full name must be at least 3 characters long.');
-      return false;
-    }
-    if (!profileUrl) {
-      myAlert('error', 'Choose a Profile');
-      return false;
-    }
-    if (fullName.length > 50) {
-      myAlert('error', 'Full name cannot exceed 50 characters.');
-      return false;
-    }
 
-    if (userName.length < 7) {
-      myAlert('error', 'Username must be at least 7 characters long.');
-      return false;
-    }
-    if (userName.length > 50) {
-      myAlert('error', 'Username cannot exceed 50 characters.');
-      return false;
-    }
-
-    if (password.length < 7) {
-      myAlert('error', 'Password must be at least 7 characters long.');
-      return false;
-    }
-    if (password.length > 50) {
-      myAlert('error', 'Password cannot exceed 50 characters.');
-      return false;
-    }
-    if (!/[A-Z]/.test(password)) {
-      myAlert('error', 'Password must include at least one uppercase letter.');
-      return false;
-    }
-    if (!/[0-9]/.test(password)) {
-      myAlert('error', 'Password must include at least one number.');
-      return false;
-    }
-
-    if (password !== confirmPassword) {
-      myAlert('error', 'Passwords do not match. Please try again.');
-      return false;
-    }
-
+  function validateInput(
+    fullName,
+    userName,
+    password,
+    confirmPassword,
+    profileUrl
+  ) {
+    if (fullName.length < 3)
+      return myAlert('error', 'Full name must be at least 3 characters long.');
+    if (!profileUrl) return myAlert('error', 'Choose a Profile');
+    if (fullName.length > 50)
+      return myAlert('error', 'Full name cannot exceed 50 characters.');
+    if (userName.length < 7)
+      return myAlert('error', 'Username must be at least 7 characters long.');
+    if (userName.length > 50)
+      return myAlert('error', 'Username cannot exceed 50 characters.');
+    if (password.length < 7)
+      return myAlert('error', 'Password must be at least 7 characters long.');
+    if (password.length > 50)
+      return myAlert('error', 'Password cannot exceed 50 characters.');
+    if (!/[A-Z]/.test(password))
+      return myAlert(
+        'error',
+        'Password must include at least one uppercase letter.'
+      );
+    if (!/[0-9]/.test(password))
+      return myAlert('error', 'Password must include at least one number.');
+    if (password !== confirmPassword)
+      return myAlert('error', 'Passwords do not match.');
     return true;
   }
 
   document.getElementById('submit-button').onclick = async function (event) {
     event.preventDefault();
+    myAlert('info', 'Validating');
+
     const fullName = document.getElementById('fullName').value;
     const userName = document.getElementById('userName').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
-myAlert('info','Validating');
-let profileUrlBase64;
- let fileInput = document.getElementById('fileInput');
- if (fileInput.files.length === 0) return;
 
- let file = fileInput.files[0];
- let reader = new FileReader();
+    let fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length === 0)
+      return myAlert('error', 'Choose a Profile');
 
- reader.onload = function (event) {
-   let img = new Image();
-   img.src = event.target.result;
+    let profileUrlBase64 = await resizeAndConvert(fileInput.files[0]);
+    document.getElementById('profileImage').src = profileUrlBase64;
 
-   img.onload = function () {
-     let canvas = document.createElement('canvas');
-     let ctx = canvas.getContext('2d');
-
-     canvas.width = 200;
-     canvas.height = 200;
-     ctx.drawImage(img, 0, 0, 200, 200);
-
-     let base64String = canvas.toDataURL('image/jpeg', 0.8);
-     document.getElementById('profileImage').src = base64String;
-     profileUrlBase64=base64String;
-   };
- };
- reader.readAsDataURL(file);
-
-
-    if (validateInput(fullName, userName, password, confirmPassword)) {
-       
+    if (
+      validateInput(
+        fullName,
+        userName,
+        password,
+        confirmPassword,
+        profileUrlBase64
+      )
+    ) {
       await axios
         .post(
           'https://ping-server-2.onrender.com/auth/signupSuccessful',
@@ -188,9 +137,7 @@ let profileUrlBase64;
           },
           {
             withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
           }
         )
         .then((response) => {
@@ -208,8 +155,5 @@ let profileUrlBase64;
 };
 
 document.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') {
-    document.querySelector('.btnClick').click();
-  }
+  if (e.key === 'Enter') document.querySelector('.btnClick').click();
 });
- 
